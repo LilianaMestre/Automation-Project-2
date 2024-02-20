@@ -1,8 +1,5 @@
-/**
- * This is an example file and approach for POM in Cypress
- */
 import IssueModal from "../../pages/IssueModal";
-
+const issueTitle = "This is an issue of type: Task.";
 describe("Issue delete", () => {
   beforeEach(() => {
     cy.visit("/");
@@ -18,5 +15,14 @@ describe("Issue delete", () => {
     IssueModal.clickDeleteButton();
     IssueModal.confirmDeletion();
     IssueModal.validateIssueVisibilityState(issueTitle, false);
+  });
+
+  it("Should cancel deletion process successfully", () => {
+    IssueModal.getIssueDetailModal().should("be.visible");
+    IssueModal.clickDeleteButton();
+    IssueModal.cancelDeletion();
+    cy.get('[data-testid="modal:confirmation-dialog"]').should("not.exist");
+    IssueModal.closeDetailModal();
+    IssueModal.validateIssueVisibilityState(issueTitle, true);
   });
 });

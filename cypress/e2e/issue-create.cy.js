@@ -11,19 +11,13 @@ describe("Issue create", () => {
   });
 
   it("Should create an issue and validate it successfully", () => {
-    // System finds modal for creating issue and does next steps inside of it
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-      // Type value to description input field
       cy.get(".ql-editor").type("TEST_DESCRIPTION");
       cy.get(".ql-editor").should("have.text", "TEST_DESCRIPTION");
 
-      // Type value to title input field
-      // Order of filling in the fields is first description, then title on purpose
-      // Otherwise filling title first sometimes doesn't work due to web page implementation
       cy.get('input[name="title"]').type("TEST_TITLE");
       cy.get('input[name="title"]').should("have.value", "TEST_TITLE");
 
-      // Open issue type dropdown and choose Story
       cy.get('[data-testid="select:type"]').click();
       cy.get('[data-testid="select-option:Story"]')
         .wait(1000)
@@ -31,11 +25,9 @@ describe("Issue create", () => {
         .trigger("click");
       cy.get('[data-testid="icon:story"]').should("be.visible");
 
-      // Select Lord Gaben from assignee dropdown
       cy.get('[data-testid="select:userIds"]').click();
       cy.get('[data-testid="select-option:Lord Gaben"]').click();
 
-      // Click on button "Create issue"
       cy.get('button[type="submit"]').click();
     });
 
@@ -77,15 +69,12 @@ describe("Issue create", () => {
   });
 
   it("Should validate title is required field if missing", () => {
-    // System finds modal for creating issue and does next steps inside of it
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-      // Try to click create issue button without filling any data
       cy.get('button[type="submit"]').click();
-
-      // Use a more stable selector and check for visibility
-      cy.get('[data-testid="form-field:title"]', { timeout: 10000 })
-        .should("be.visible")
-        .and("contain", "This field is required");
+      cy.get('[data-testid="form-field:title"]').should(
+        "contain",
+        "This field is required"
+      );
     });
   });
 

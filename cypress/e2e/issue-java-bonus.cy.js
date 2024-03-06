@@ -9,7 +9,6 @@ describe("Issue details editing", () => {
       });
   });
 
-  // BONUS Task 1
   it("Should check priority dropdown lenght", () => {
     const getPriorityDropdown = () => cy.get('[data-testid="select:priority"]');
     const getSelectDropdownOption = () =>
@@ -48,7 +47,6 @@ describe("Issue details editing", () => {
     });
   });
 
-  // BONUS Task 2
   it("Should check that reporter name has only characters in it ", () => {
     const getAvatarText = () => cy.get('[data-testid="avatar:Baby Yoda"]');
     const pattern = /^[A-Za-z\s]*$/;

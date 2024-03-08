@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+
 describe("Issue create", () => {
   beforeEach(() => {
     cy.visit("/");
@@ -35,7 +36,6 @@ describe("Issue create", () => {
     cy.get('[data-testid="modal:issue-create"]').should("not.exist");
     cy.contains("Issue has been successfully created.").should("be.visible");
 
-    // Reload the page to be able to see recently created issue
     // Assert that successful message has dissappeared after the reload
     cy.reload();
     cy.contains("Issue has been successfully created.").should("not.exist");
@@ -112,7 +112,6 @@ describe("Issue create", () => {
     cy.get('[data-testid="modal:issue-create"]').should("not.exist");
     cy.contains("Issue has been successfully created.").should("be.visible");
 
-    // Reload the page to be able to see recently created issue
     // Assert that successful message has dissappeared after the reload
     cy.reload();
     cy.contains("Issue has been successfully created.").should("not.exist");
@@ -123,7 +122,6 @@ describe("Issue create", () => {
     const randomDescription = faker.lorem.words();
 
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-      // Type value to description input field using random data
       cy.get(".ql-editor").type(randomDescription);
       cy.get(".ql-editor").should("have.text", randomDescription);
 
@@ -164,5 +162,24 @@ describe("Issue create", () => {
 
     // Assert that the created issue is visible on the board
     cy.contains(randomTitle).should("be.visible");
+  });
+
+  it.only("Verify app removes unnecessary spaces on the board view", () => {
+    // define issue title as a variable with multiple spaces between words
+    const issueTitle = "  Hello  World  ";
+    // trim extra spaces
+    const trimmedTitle = issueTitle.trim();
+    //create issue with title 'Hello World'
+    cy.get('[data-testid="modal:issue-create"]').within(() => {
+      cy.get(".ql-editor").type("HELLO EVERYBODY");
+      cy.get('input[name="title"]').type(issueTitle);
+      cy.get('[data-testid="select:userIds"]').click();
+      cy.get('[data-testid="select-option:Baby Yoda"]').click();
+      cy.get('button[type="submit"]').click();
+    });
+    cy.wait(3000);
+    cy.get('[data-testid="board-list:backlog"]')
+      .first()
+      .should("contain", trimmedTitle);
   });
 });

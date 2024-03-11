@@ -14,6 +14,8 @@ describe("Time Tracking for Issues", () => {
     cy.get('[data-testid="modal:issue-details"]');
   const baseEstimation = "10";
   const revisedEstimation = "20";
+  const hoursLogged = "3";
+  const hoursRemaining = "4";
 
   it("Allows editing and clearing of time estimation for an issue", () => {
     loadIssueDetailsModal().within(() => {
@@ -31,9 +33,6 @@ describe("Time Tracking for Issues", () => {
       cy.contains(`${revisedEstimation}h estimated`).should("not.exist");
     });
   });
-
-  const hoursLogged = "3";
-  const hoursRemaining = "4";
 
   it("Enables logging of time spent and remaining on an issue, and allows removal", () => {
     cy.get('[data-testid="icon:stopwatch"]').click();
